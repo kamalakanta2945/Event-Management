@@ -1,0 +1,15 @@
+package com.bluepal.service;
+
+import com.bluepal.model.Booking;
+import com.bluepal.dto.SeatSelectionRequest;
+import java.util.List;
+
+public interface BookingService {
+    Booking createBooking(Booking booking);
+    Booking getBookingById(String id);
+    List<Booking> getBookingsByUserId(String userId);
+    List<Booking> getBookingsByEventId(String eventId);
+    Booking confirmBooking(String bookingId, String paymentId);
+    Booking cancelBooking(String bookingId);
+    List<String> selectSeats(SeatSelectionRequest request);
+}
