@@ -4,6 +4,7 @@ import { getAllPayments } from '../services/paymentService';
 
 const AdminPayments = () => {
   const [currentBg, setCurrentBg] = useState(0);
+  const [payments, setPayments] = useState([]);
   
   const backgroundImages = [
     'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=2070&q=80',
@@ -16,6 +17,18 @@ const AdminPayments = () => {
       setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
     }, 5000);
     return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await getAllPayments();
+        setPayments(Array.isArray(data) ? data : []);
+      } catch (e) {
+        setPayments([]);
+      }
+    };
+    load();
   }, []);
 
   return (
