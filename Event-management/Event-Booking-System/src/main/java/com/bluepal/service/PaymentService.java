@@ -1,18 +1,17 @@
 package com.bluepal.service;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
-
 import com.bluepal.dto.PaymentRequest;
 import com.bluepal.model.Payment;
 import com.bluepal.response.RazorPayOrderResponse;
 import com.razorpay.RazorpayException;
+import java.util.List;
 
 public interface PaymentService {
 
     // Create RazorPay order and save Payment in MongoDB
     RazorPayOrderResponse createOrder(PaymentRequest paymentRequest) throws RazorpayException;
 
-    // Verify RazorPay payment signature and update MongoDB
+    // Verify RazorPay payment signature and update MongoDB; also confirm booking on success
     Payment verifyPayment(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature);
 
     // Get Payment by bookingId from MongoDB
@@ -21,5 +20,6 @@ public interface PaymentService {
     // Update Payment status in MongoDB
     Payment updatePaymentStatus(String paymentId, String status);
 
-	RazorPayOrderResponse createOrder(PathRequest paymentRequest) throws RazorpayException;
+    // List all payments (admin use)
+    List<Payment> getAllPayments();
 }
