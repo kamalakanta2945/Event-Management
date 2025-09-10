@@ -123,4 +123,9 @@ public class EventServiceImpl implements EventService {
     public List<Event> getUpcomingEvents() {
         return eventRepository.findUpcomingEvents(LocalDateTime.now());
     }
+
+    @Override
+    public List<Event> getEventsByOrganizer(String organizerId) {
+        return eventRepository.findByOrganizerId(organizerId);
+    }
 }

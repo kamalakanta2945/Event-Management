@@ -63,6 +63,16 @@ public class EventController {
         return ResponseEntity.ok(new ResponseWrapper<>("Events retrieved successfully", events));
     }
     
+    @GetMapping("/my-events")
+    public ResponseEntity<ResponseWrapper<List<Event>>> getMyEvents(@RequestHeader("Authorization") String jwt) {
+        UserModel user = authService.findUserProfileByJwt(jwt);
+        if (user.getRole() != USER_ROLE.ROLE_ADMIN && user.getRole() != USER_ROLE.ROLE_ORGANIZER) {
+            throw new AccessDeniedException("You are not authorized to view organizer events.");
+        }
+        List<Event> events = eventService.getEventsByOrganizer(user.getId());
+        return ResponseEntity.ok(new ResponseWrapper<>("Organizer events retrieved successfully", events));
+    }
+    
     @PutMapping("/{id}")
     public ResponseEntity<ResponseWrapper<Event>> updateEvent(@PathVariable String id, @RequestBody Event event, @RequestHeader("Authorization") String jwt) {
         UserModel user = authService.findUserProfileByJwt(jwt);

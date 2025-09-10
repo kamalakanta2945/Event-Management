@@ -1,4 +1,4 @@
-package com.bluepal.repository;
+THIS SHOULD BE A LINTER ERRORpackage com.bluepal.repository;
 
 import com.bluepal.model.Event;
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -21,4 +21,7 @@ public interface EventRepository extends MongoRepository<Event, String> {
     // Get upcoming events (date greater than now)
     @Query("{ 'eventDateTime': { $gt: ?0 } }")
     List<Event> findUpcomingEvents(LocalDateTime currentDateTime);
+
+    // Find events by organizer id
+    List<Event> findByOrganizerId(String organizerId);
 }
