@@ -24,6 +24,8 @@ public interface IUserService {
 
 	public UserModel updateUser(UserRequest updateRequest, String userId, String adminId) throws UserException;
 
+	public UserModel updateUserProfile(UserProfileUpdateRequest updateRequest, String userId) throws UserException;
+
 	public UserModel updateUserStatus(String userId) throws UserException;
 
 	public Page<UserModel> searchAllUserByPage(String query, Pageable pageable) throws UserException;

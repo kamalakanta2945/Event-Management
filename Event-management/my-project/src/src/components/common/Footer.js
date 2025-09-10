@@ -1,4 +1,5 @@
-import { Typography, Box, Link } from '@mui/material';
+import { Typography, Box } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { Facebook, Twitter, Instagram, LinkedIn } from '@mui/icons-material';
 
 const Footer = () => (
@@ -43,7 +44,10 @@ const Footer = () => (
       </div>
       
       <Box className="mt-6 pt-4 border-t border-gray-700 text-center">
-        <Typography variant="body2" className="text-gray-400">
+        <Link to="/sitemap" className="text-gray-400 hover:text-white transition-colors">
+          Sitemap
+        </Link>
+        <Typography variant="body2" className="text-gray-400 mt-2">
           Designed with ❤️ for unforgettable experiences
         </Typography>
       </Box>

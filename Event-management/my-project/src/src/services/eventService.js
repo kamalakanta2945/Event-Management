@@ -37,8 +37,16 @@ export const getUpcomingEvents = async () => {
 };
 
 /**
+ * Get events for the logged-in organizer
+ */
+export const getEventsByOrganizer = async () => {
+    const response = await api.get('/events/my-events');
+    return response.data.data ? response.data.data : response.data;
+};
+
+/**
  * Search events with optional params
- * @param {Object} params - { name, venue }
+ * @param {Object} params - { name, venue, category, startDate, endDate }
  */
 export const searchEvents = async (params) => {
   const response = await api.get('/events/search', { params });

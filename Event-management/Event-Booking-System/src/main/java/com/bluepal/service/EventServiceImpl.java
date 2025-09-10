@@ -1,10 +1,15 @@
 package com.bluepal.service;
 
 import com.bluepal.model.Event;
+import com.bluepal.model.UserModel;
+import com.bluepal.model.USER_ROLE;
 import com.bluepal.repository.EventRepository;
 import com.bluepal.service.EventService;
 import com.bluepal.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,37 +21,49 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private IUserService userService;
+
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Override
-    public Event createEvent(Event event) {
+    public Event createEvent(Event event, String organizerId) {
+        event.setOrganizerId(organizerId);
         event.setCreatedAt(LocalDateTime.now());
         event.setUpdatedAt(LocalDateTime.now());
         return eventRepository.save(event);
     }
 
     @Override
-    public Event updateEvent(String id, Event event) {
-        Optional<Event> existingEvent = eventRepository.findById(id);
-        if (existingEvent.isPresent()) {
-            Event updatedEvent = existingEvent.get();
-            updatedEvent.setName(event.getName());
-            updatedEvent.setDescription(event.getDescription());
-            updatedEvent.setVenue(event.getVenue());
-            updatedEvent.setEventDateTime(event.getEventDateTime());
-            updatedEvent.setBookingStartDate(event.getBookingStartDate());
-            updatedEvent.setBookingEndDate(event.getBookingEndDate());
-            updatedEvent.setTotalSeats(event.getTotalSeats());
-            updatedEvent.setTicketPrice(event.getTicketPrice());
-            updatedEvent.setActive(event.isActive());
-            updatedEvent.setUpdatedAt(LocalDateTime.now());
-            return eventRepository.save(updatedEvent);
+    public Event updateEvent(String id, Event event, String userId) {
+        UserModel user = userService.findUserById(userId);
+        Event existingEvent = getEventById(id);
+
+        if (!existingEvent.getOrganizerId().equals(userId) && !user.getRole().equals(USER_ROLE.ROLE_ADMIN)) {
+            throw new ResourceNotFoundException("You are not authorized to update this event.");
         }
-        throw new ResourceNotFoundException("Event not found with id: " + id);
+
+        existingEvent.setName(event.getName());
+        existingEvent.setDescription(event.getDescription());
+        existingEvent.setVenue(event.getVenue());
+        existingEvent.setEventDateTime(event.getEventDateTime());
+        existingEvent.setBookingStartDate(event.getBookingStartDate());
+        existingEvent.setBookingEndDate(event.getBookingEndDate());
+        existingEvent.setTotalSeats(event.getTotalSeats());
+        existingEvent.setTicketPrice(event.getTicketPrice());
+        existingEvent.setActive(event.isActive());
+        existingEvent.setUpdatedAt(LocalDateTime.now());
+        return eventRepository.save(existingEvent);
     }
 
     @Override
-    public void deleteEvent(String id) {
-        if (!eventRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Event not found with id: " + id);
+    public void deleteEvent(String id, String userId) {
+        UserModel user = userService.findUserById(userId);
+        Event existingEvent = getEventById(id);
+
+        if (!existingEvent.getOrganizerId().equals(userId) && !user.getRole().equals(USER_ROLE.ROLE_ADMIN)) {
+            throw new ResourceNotFoundException("You are not authorized to delete this event.");
         }
         eventRepository.deleteById(id);
     }
@@ -63,15 +80,25 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<Event> searchEvents(String name, String venue) {
-        if (name != null && venue != null) {
-            return eventRepository.findByNameContainingIgnoreCaseAndVenueContainingIgnoreCase(name, venue);
-        } else if (name != null) {
-            return eventRepository.findByNameContainingIgnoreCase(name);
-        } else if (venue != null) {
-            return eventRepository.findByVenueContainingIgnoreCase(venue);
+    public List<Event> searchEvents(String name, String venue, String category, LocalDateTime startDate, LocalDateTime endDate) {
+        Query query = new Query();
+        if (name != null && !name.isEmpty()) {
+            query.addCriteria(Criteria.where("name").regex(name, "i"));
         }
-        return eventRepository.findAll();
+        if (venue != null && !venue.isEmpty()) {
+            query.addCriteria(Criteria.where("venue").regex(venue, "i"));
+        }
+        if (category != null && !category.isEmpty()) {
+            query.addCriteria(Criteria.where("category").is(category));
+        }
+        if (startDate != null && endDate != null) {
+            query.addCriteria(Criteria.where("eventDateTime").gte(startDate).lte(endDate));
+        } else if (startDate != null) {
+            query.addCriteria(Criteria.where("eventDateTime").gte(startDate));
+        } else if (endDate != null) {
+            query.addCriteria(Criteria.where("eventDateTime").lte(endDate));
+        }
+        return mongoTemplate.find(query, Event.class);
     }
 
     @Override

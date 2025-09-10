@@ -12,4 +12,5 @@ public interface BookingService {
     Booking confirmBooking(String bookingId, String paymentId);
     Booking cancelBooking(String bookingId);
     List<String> selectSeats(SeatSelectionRequest request);
+    void sendBookingConfirmation(String bookingId);
 }

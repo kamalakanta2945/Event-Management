@@ -4,12 +4,20 @@ import Loader from '../components/common/Loader';
 import SeatSelection from '../components/booking/SeatSelection';
 import BookingForm from '../components/booking/BookingForm';
 import PaymentForm from '../components/payment/PaymentForm';
+import ReviewList from '../components/review/ReviewList';
+import ReviewForm from '../components/review/ReviewForm';
 import { getEventById } from '../services/eventService';
+import { getBookingsByUser } from '../services/bookingService';
+import { isAuthenticated } from '../utils/authUtils';
+import { Rating, Typography } from '@mui/material';
 
 const EventDetails = () => {
   const { id } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [userBookings, setUserBookings] = useState([]);
+  const [hasBooked, setHasBooked] = useState(false);
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [currentBg, setCurrentBg] = useState(0);
   
   const backgroundImages = [
@@ -19,10 +27,24 @@ const EventDetails = () => {
   ];
 
   useEffect(() => {
-    getEventById(id).then((data) => {
-      setEvent(data);
-      setLoading(false);
-    });
+    const fetchEventDetails = () => {
+        getEventById(id).then((data) => {
+          setEvent(data.data);
+          setLoading(false);
+        });
+    };
+    fetchEventDetails();
+  }, [id, reviewSubmitted]);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      getBookingsByUser().then((data) => {
+        setUserBookings(data.data);
+        if (data.data.some(booking => booking.event.id === id)) {
+            setHasBooked(true);
+        }
+      });
+    }
   }, [id]);
 
   useEffect(() => {
@@ -59,11 +81,25 @@ const EventDetails = () => {
               </div>
             </div>
             <h1 className="text-4xl font-bold text-gray-800 mb-3 tracking-wide">{event.name}</h1>
+            <div className="flex justify-center items-center mb-4">
+                <Rating value={event.averageRating || 0} readOnly precision={0.5} />
+                <Typography sx={{ ml: 1 }}>({event.reviews?.length || 0} reviews)</Typography>
+            </div>
             <div className="w-24 h-1 bg-gradient-to-r from-purple-500 to-indigo-600 mx-auto rounded-full mb-4"></div>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">{event.description}</p>
           </div>
           
           <div className="space-y-8">
+            <div className="bg-gradient-to-br from-yellow-50 to-orange-50 rounded-xl p-6 border border-yellow-100 shadow-sm">
+                <h2 className="text-2xl font-bold text-gray-800 mb-4">Reviews</h2>
+                <ReviewList reviews={event.reviews} />
+                {hasBooked && (
+                    <div className="mt-6">
+                        <h3 className="text-xl font-semibold mb-2">Leave a Review</h3>
+                        <ReviewForm eventId={id} onReviewSubmit={() => setReviewSubmitted(!reviewSubmitted)} />
+                    </div>
+                )}
+            </div>
             {/* Seat Selection Section */}
             <div className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-xl p-6 border border-purple-100 shadow-sm">
               <div className="flex items-center mb-5">

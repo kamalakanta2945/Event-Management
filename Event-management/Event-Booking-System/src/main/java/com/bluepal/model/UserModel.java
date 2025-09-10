@@ -23,7 +23,10 @@ public class UserModel {
     private String middleName;
     private String lastName;
 
-    
+    private String address;
+    private String bio;
+    private String profilePictureUrl;
+
     private USER_ROLE role;
 
     private String email1;

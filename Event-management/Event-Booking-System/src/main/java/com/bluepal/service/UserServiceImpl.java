@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.bluepal.dto.UserRequest;
+import com.bluepal.dto.UserProfileUpdateRequest;
 import com.bluepal.exception.UserException;
 import com.bluepal.model.UserModel;
 import com.bluepal.properties.UserProperties;
@@ -193,6 +194,49 @@ public class UserServiceImpl implements IUserService {
 
 		log.info("User with ID: {} updated successfully", userId);
 		return updateUser;
+	}
+
+	@Override
+	@CacheEvict(value = "users", key = "#userId", allEntries = true)
+	public UserModel updateUserProfile(UserProfileUpdateRequest updateRequest, String userId) throws UserException {
+		log.info("Updating user profile for user with ID: {}", userId);
+
+		UserModel existingUser = findUserById(userId);
+
+		if (updateRequest.getFirstName() != null) {
+			existingUser.setFirstName(updateRequest.getFirstName());
+		}
+		if (updateRequest.getMiddleName() != null) {
+			existingUser.setMiddleName(updateRequest.getMiddleName());
+		}
+		if (updateRequest.getLastName() != null) {
+			existingUser.setLastName(updateRequest.getLastName());
+		}
+		if (updateRequest.getEmail2() != null) {
+			existingUser.setEmail2(updateRequest.getEmail2());
+		}
+		if (updateRequest.getMobileNo1() != null) {
+			existingUser.setMobileNo1(updateRequest.getMobileNo1());
+		}
+		if (updateRequest.getMobileNo2() != null) {
+			existingUser.setMobileNo2(updateRequest.getMobileNo2());
+		}
+		if (updateRequest.getAddress() != null) {
+			existingUser.setAddress(updateRequest.getAddress());
+		}
+		if (updateRequest.getBio() != null) {
+			existingUser.setBio(updateRequest.getBio());
+		}
+		if (updateRequest.getProfilePictureUrl() != null) {
+			existingUser.setProfilePictureUrl(updateRequest.getProfilePictureUrl());
+		}
+
+		existingUser.setUpdatedBy(userId); // User is updating their own profile
+
+		UserModel updatedUser = userRepo.save(existingUser);
+
+		log.info("User profile updated successfully for user with ID: {}", userId);
+		return updatedUser;
 	}
 
 	private String readEmailBody(String fullName, String userName, String pwd, String fileName) {
