@@ -4,6 +4,7 @@ import com.bluepal.model.Booking;
 import com.bluepal.service.BookingService;
 import com.bluepal.util.ResponseWrapper;
 import com.bluepal.dto.SeatSelectionRequest;
+import com.bluepal.service.PdfService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +22,19 @@ public class BookingController {
     @Autowired
     private BookingService bookingService;
     
+    @Autowired
+    private PdfService pdfService;
+    
     @PostMapping
     public ResponseEntity<ResponseWrapper<Booking>> createBooking(@RequestBody Booking booking) {
         Booking createdBooking = bookingService.createBooking(booking);
         return ResponseEntity.ok(new ResponseWrapper<>("Booking created successfully", createdBooking));
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseWrapper<List<Booking>>> getAllBookings() {
+        List<Booking> bookings = bookingService.getAllBookings();
+        return ResponseEntity.ok(new ResponseWrapper<>("Bookings retrieved successfully", bookings));
     }
     
     @GetMapping("/{id}")
