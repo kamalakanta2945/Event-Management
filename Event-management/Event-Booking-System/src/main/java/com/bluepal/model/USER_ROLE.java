@@ -2,6 +2,7 @@ package com.bluepal.model;
 
 public enum USER_ROLE {
     ROLE_ADMIN,
+    ROLE_ORGANIZER,
     ROLE_USER
 }
 

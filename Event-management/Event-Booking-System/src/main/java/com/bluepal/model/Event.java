@@ -13,8 +13,10 @@ import lombok.Data;
 public class Event {
     @Id
     private String id;
+    private String organizerId;
 
     private String name;
+    private String category;
     private String description;
     private String venue;
     private LocalDateTime eventDateTime;
@@ -27,6 +29,8 @@ public class Event {
     private double ticketPrice;
 
     private List<Seat> seats;   // ✅ Linked with Seat + SeatStatus enum
+    private List<Review> reviews;
+    private double averageRating;
 
     private boolean isActive;
 

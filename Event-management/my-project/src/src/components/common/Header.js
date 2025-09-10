@@ -76,6 +76,17 @@ const Header = () => {
               >
                 <span className="hidden sm:inline">My Bookings</span>
               </Button>
+
+              {(role === ROLES.ADMIN || role === ROLES.ORGANIZER) && (
+                <Button
+                  color="inherit"
+                  component={Link}
+                  to="/my-events"
+                  className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300"
+                >
+                  <span className="hidden sm:inline">My Events</span>
+                </Button>
+              )}
               
               {role === ROLES.ADMIN && (
                 <>
@@ -153,6 +164,15 @@ const Header = () => {
                     className: "bg-gray-800/90 backdrop-blur-xl border border-gray-700/50 text-amber-100"
                   }}
                 >
+                  <MenuItem
+                    component={Link}
+                    to="/profile"
+                    onClick={handleClose}
+                    className="flex items-center hover:bg-amber-900/30"
+                  >
+                    <AccountCircle className="mr-2 text-amber-300" />
+                    Profile
+                  </MenuItem>
                   <MenuItem 
                     component={Link} 
                     to="/dashboard" 

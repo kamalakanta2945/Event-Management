@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bluepal.dto.UserRequest;
+import com.bluepal.dto.UserProfileUpdateRequest;
 import com.bluepal.exception.UserException;
 import com.bluepal.model.USER_ROLE;
 import com.bluepal.model.UserModel;
@@ -71,6 +72,21 @@ public class UserRestController {
         UserModel userProfileByJwt = authService.findUserProfileByJwt(jwt);
         log.info("Successfully retrieved user profile for user with ID: {}", userProfileByJwt.getId());
         return new ResponseEntity<>(userProfileByJwt, HttpStatus.OK);
+    }
+
+    @PutMapping("/profile")
+    public ResponseEntity<AppResponse<UserModel>> updateUserProfile(@RequestHeader("Authorization") String jwt,
+                                                                    @Valid @RequestBody UserProfileUpdateRequest req) throws Exception {
+        log.info("Attempting to update user profile.");
+
+        UserModel user = authService.findUserProfileByJwt(jwt);
+        log.debug("User with ID: {} is attempting to update their own profile.", user.getId());
+
+        UserModel updatedUser = userService.updateUserProfile(req, user.getId());
+        log.info("User profile with ID: {} successfully updated.", user.getId());
+
+        AppResponse<UserModel> response = new AppResponse<>(updatedUser, "User Profile Updated Successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/byId/{id}")

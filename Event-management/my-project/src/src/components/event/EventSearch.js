@@ -78,6 +78,43 @@ const EventSearch = () => {
                 }}
               />
             </Box>
+
+            <Box sx={{ position: 'relative', flex: 1 }}>
+              <TextField
+                label="Category"
+                {...register('category')}
+                fullWidth
+                InputProps={{
+                  className: 'rounded-lg'
+                }}
+              />
+            </Box>
+
+            <Box sx={{ position: 'relative', flex: 1 }}>
+              <TextField
+                label="Start Date"
+                type="date"
+                {...register('startDate')}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  className: 'rounded-lg'
+                }}
+              />
+            </Box>
+
+            <Box sx={{ position: 'relative', flex: 1 }}>
+              <TextField
+                label="End Date"
+                type="date"
+                {...register('endDate')}
+                fullWidth
+                InputLabelProps={{ shrink: true }}
+                InputProps={{
+                  className: 'rounded-lg'
+                }}
+              />
+            </Box>
             
             <Box sx={{ position: 'relative', flex: 1 }}>
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
