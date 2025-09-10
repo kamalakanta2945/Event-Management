@@ -68,4 +68,15 @@ public class PaymentController {
 		List<Payment> payments = paymentService.getAllPayments();
 		return ResponseEntity.ok(new ResponseWrapper<>("Payments retrieved successfully", payments));
 	}
+
+	@PostMapping("/scan-verify")
+	public ResponseEntity<ResponseWrapper<Payment>> scanVerify(@RequestParam String razorpayOrderId,
+			@RequestParam String razorpayPaymentId) {
+		try {
+			Payment payment = paymentService.scanVerify(razorpayOrderId, razorpayPaymentId);
+			return ResponseEntity.ok(new ResponseWrapper<>("Scan verification successful", payment));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new ResponseWrapper<>(e.getMessage(), null));
+		}
+	}
 }

@@ -16,6 +16,7 @@ const Sitemap = () => {
         { path: '/admin/events', name: 'Admin: Manage Events' },
         { path: '/admin/bookings', name: 'Admin: Manage Bookings' },
         { path: '/admin/payments', name: 'Admin: Manage Payments' },
+        { path: '/admin/scanner', name: 'Admin: Payment Scanner' },
     ];
 
     return (

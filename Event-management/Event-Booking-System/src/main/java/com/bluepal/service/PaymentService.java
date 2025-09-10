@@ -22,4 +22,7 @@ public interface PaymentService {
 
     // List all payments (admin use)
     List<Payment> getAllPayments();
+
+    // Verify a payment by scanning (uses Razorpay API to fetch and validate)
+    Payment scanVerify(String razorpayOrderId, String razorpayPaymentId);
 }

@@ -20,6 +20,7 @@ import ProfilePage from './src/pages/ProfilePage';
 import MyEventsPage from './src/pages/MyEventsPage';
 import EventForm from './src/components/event/EventForm';
 import Sitemap from './src/pages/Sitemap';
+import Scanner from './src/components/admin/Scanner';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
   
@@ -54,6 +55,7 @@ function App() {
             <Route path="/admin/events" element={<PrivateRoute roles={['ROLE_ADMIN']}><AdminEvents /></PrivateRoute>} />
             <Route path="/admin/bookings" element={<PrivateRoute roles={['ROLE_ADMIN']}><AdminBookings /></PrivateRoute>} />
             <Route path="/admin/payments" element={<PrivateRoute roles={['ROLE_ADMIN']}><AdminPayments /></PrivateRoute>} />
+            <Route path="/admin/scanner" element={<PrivateRoute roles={['ROLE_ADMIN']}><Scanner /></PrivateRoute>} />
 
             <Route path="/sitemap" element={<Sitemap />} />
             <Route path="*" element={<NotFound />} />

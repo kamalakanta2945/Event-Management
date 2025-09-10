@@ -49,3 +49,16 @@ export const getAllPayments = async () => {
     throw error;
   }
 };
+
+// Scan-verify a payment (for admins using a scanner)
+export const scanVerifyPayment = async (orderId, paymentId) => {
+  try {
+    const response = await api.post('/payments/scan-verify', null, {
+      params: { razorpayOrderId: orderId, razorpayPaymentId: paymentId },
+    });
+    return response.data?.data || response.data;
+  } catch (error) {
+    console.error('Error scan-verifying payment:', error);
+    throw error;
+  }
+};
