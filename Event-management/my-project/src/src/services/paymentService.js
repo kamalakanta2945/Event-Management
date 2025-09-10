@@ -4,7 +4,7 @@ import api from './api';
 export const createOrder = async (data) => {
   try {
     const response = await api.post('/payments/create-order', data);
-    return response.data;
+    return response.data?.data || response.data;
   } catch (error) {
     console.error('Error creating order:', error);
     throw error;
@@ -21,7 +21,7 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
         razorpaySignature: signature,
       },
     });
-    return response.data;
+    return response.data?.data || response.data;
   } catch (error) {
     console.error('Error verifying payment:', error);
     throw error;
@@ -32,7 +32,7 @@ export const verifyPayment = async (orderId, paymentId, signature) => {
 export const getPaymentByBookingId = async (bookingId) => {
   try {
     const response = await api.get(`/payments/booking/${bookingId}`);
-    return response.data;
+    return response.data?.data || response.data;
   } catch (error) {
     console.error('Error fetching payment:', error);
     throw error;
@@ -43,7 +43,7 @@ export const getPaymentByBookingId = async (bookingId) => {
 export const getAllPayments = async () => {
   try {
     const response = await api.get('/payments');
-    return response.data;
+    return response.data?.data || response.data;
   } catch (error) {
     console.error('Error fetching all payments:', error);
     throw error;

@@ -1,5 +1,6 @@
 import PaymentList from '../components/admin/PaymentList';
 import { useState, useEffect } from 'react';
+import { getAllPayments } from '../services/paymentService';
 
 const AdminPayments = () => {
   const [currentBg, setCurrentBg] = useState(0);
@@ -41,7 +42,7 @@ const AdminPayments = () => {
           </div>
           
           <div className="mt-4">
-            <PaymentList />
+            <PaymentList payments={payments || []} />
           </div>
         </div>
       </div>

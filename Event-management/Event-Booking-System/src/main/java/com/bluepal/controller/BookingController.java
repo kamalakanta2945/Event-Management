@@ -7,6 +7,10 @@ import com.bluepal.dto.SeatSelectionRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.HttpStatus;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 
 @RestController
@@ -59,5 +63,18 @@ public class BookingController {
     public ResponseEntity<ResponseWrapper<Booking>> cancelBooking(@PathVariable String bookingId) {
         Booking booking = bookingService.cancelBooking(bookingId);
         return ResponseEntity.ok(new ResponseWrapper<>("Booking cancelled successfully", booking));
+    }
+
+    @GetMapping("/{bookingId}/ticket")
+    public ResponseEntity<byte[]> downloadTicket(@PathVariable String bookingId) {
+        Booking booking = bookingService.getBookingById(bookingId);
+        ByteArrayInputStream pdfStream = pdfService.generateBookingPdf(booking);
+        byte[] pdfBytes = pdfStream.readAllBytes();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "ticket-" + bookingId + ".pdf");
+
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 }

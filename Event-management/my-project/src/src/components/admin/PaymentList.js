@@ -39,7 +39,7 @@ const PaymentList = ({ payments }) => {
           </tr>
         </thead>
         <tbody>
-          {payments.map((payment) => (
+          {(payments || []).map((payment) => (
             <tr key={payment.id} className="border-b hover:bg-gray-50">
               <td className="p-3">{payment.id}</td>
               <td className="p-3 flex items-center text-green-600 font-semibold">
@@ -57,10 +57,10 @@ const PaymentList = ({ payments }) => {
                 )}
               </td>
               <td className="p-3 flex items-center text-gray-700">
-                <VscCalendar className="mr-1" /> {payment.date}
+                <VscCalendar className="mr-1" /> {new Date(payment.paymentDate || payment.createdAt).toLocaleDateString()}
               </td>
               <td className="p-3 flex items-center text-gray-700">
-                <FaClock className="mr-1" /> {payment.time}
+                <FaClock className="mr-1" /> {new Date(payment.paymentDate || payment.createdAt).toLocaleTimeString()}
               </td>
             </tr>
           ))}

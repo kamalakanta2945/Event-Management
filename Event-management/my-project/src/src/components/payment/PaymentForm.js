@@ -1,11 +1,28 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Button, Box, Paper, Typography, CircularProgress } from '@mui/material';
 import { createOrder, verifyPayment } from '../../services/paymentService';
+import { getBookingById, confirmBooking } from '../../services/bookingService';
 import { toast } from 'react-toastify';
 import { VscCreditCard, VscLock } from 'react-icons/vsc';
 
-const PaymentForm = ({ bookingId, amount }) => {
+const PaymentForm = () => {
+  const { bookingId } = useParams();
   const [loading, setLoading] = useState(false);
+  const [amount, setAmount] = useState(0);
+
+  useEffect(() => {
+    const loadBooking = async () => {
+      try {
+        const res = await getBookingById(bookingId);
+        const booking = res?.data || res; // unwrap ResponseWrapper
+        setAmount(booking?.totalAmount || 0);
+      } catch (e) {
+        toast.error('Failed to load booking');
+      }
+    };
+    if (bookingId) loadBooking();
+  }, [bookingId]);
   
   const loadScript = (src) => {
     return new Promise((resolve) => {
@@ -23,17 +40,26 @@ const PaymentForm = ({ bookingId, amount }) => {
     
     setLoading(true);
     try {
-      const order = await createOrder({ bookingId, amount });
+      const orderRes = await createOrder({ bookingId, amount });
+      const order = orderRes?.data || orderRes;
       const options = {
-        key: 'YOUR_RAZORPAY_TEST_KEY', // Replace with your key
+        key: order.key,
         amount: order.amount,
         currency: 'INR',
         name: 'Event Booking',
         description: 'Test Transaction',
-        order_id: order.id,
+        order_id: order.orderId || order.id,
         handler: async (response) => {
-          await verifyPayment(response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature);
-          toast.success('Payment successful');
+          const verifyRes = await verifyPayment(response.razorpay_order_id, response.razorpay_payment_id, response.razorpay_signature);
+          const payment = verifyRes?.data || verifyRes;
+          if (payment?.status === 'SUCCESS') {
+            try {
+              await confirmBooking(bookingId, response.razorpay_payment_id);
+            } catch (e) {}
+            toast.success('Payment successful');
+          } else {
+            toast.error('Payment verification failed');
+          }
         },
         theme: { color: '#3399cc' },
       };

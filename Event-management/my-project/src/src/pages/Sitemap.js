@@ -10,6 +10,8 @@ const Sitemap = () => {
         { path: '/dashboard', name: 'Dashboard' },
         { path: '/profile', name: 'Profile' },
         { path: '/my-events', name: 'My Events' },
+        { path: '/seat-selection/:eventId', name: 'Seat Selection' },
+        { path: '/payment/:bookingId', name: 'Payment' },
         { path: '/admin/users', name: 'Admin: Manage Users' },
         { path: '/admin/events', name: 'Admin: Manage Events' },
         { path: '/admin/bookings', name: 'Admin: Manage Bookings' },
@@ -38,7 +40,7 @@ const Sitemap = () => {
                         The backend API documentation is available via Swagger UI.
                     </p>
                     <a
-                        href="http://localhost:8080/swagger-ui.html"
+                        href="http://localhost:4041/swagger-ui/index.html"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="text-blue-500 hover:underline"
