@@ -2,10 +2,10 @@ package com.bluepal.service;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.List;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.stereotype.Service;
 
 import com.razorpay.Order;
@@ -28,6 +28,9 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
+
+    @Autowired
+    private BookingService bookingService;
 
     @Override
     public RazorPayOrderResponse createOrder(PaymentRequest paymentRequest) throws RazorpayException {
@@ -85,6 +88,11 @@ public class PaymentServiceImpl implements PaymentService {
                 payment.setRazorpaySignature(razorpaySignature);
                 payment.setStatus(PaymentStatus.SUCCESS);
                 payment.setPaymentDate(LocalDateTime.now());
+                try {
+                    bookingService.confirmBooking(payment.getBookingId(), razorpayPaymentId);
+                } catch (Exception ex) {
+                    payment.setStatus(PaymentStatus.FAILED);
+                }
             } else {
                 payment.setStatus(PaymentStatus.FAILED);
             }
@@ -110,9 +118,8 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.save(payment);
     }
 
-	@Override
-	public RazorPayOrderResponse createOrder(PathRequest paymentRequest) throws RazorpayException {
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public java.util.List<com.bluepal.model.Payment> getAllPayments() {
+        return paymentRepository.findAll();
+    }
 }
