@@ -1,19 +1,23 @@
 import api from './api';
 
 export const getUserProfile = async () => {
-    return api.get('/user/profile');
+    const res = await api.get('/user/profile');
+    return res.data?.data || res.data;
 };
 
 export const updateUserProfile = async (data) => {
-    return api.put('/user/profile', data);
+    const res = await api.put('/user/profile', data);
+    return res.data?.data || res.data;
 };
 
 export const updateUser = async (userId, data) => {
-  return api.post(`/user/${userId}`, data);
+  const res = await api.post(`/user/${userId}`, data);
+  return res.data?.data || res.data;
 };
 
 export const getUserById = async (id) => {
-  return (await api.get(`/user/byId/${id}`)).data;
+  const res = await api.get(`/user/byId/${id}`);
+  return res.data?.data || res.data;
 };
 
 // Add more if needed

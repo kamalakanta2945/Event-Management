@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.bluepal.dto.UserRequest;
+import com.bluepal.dto.UserProfileUpdateRequest;
 import com.bluepal.exception.UserException;
 import com.bluepal.model.UserModel;
 import com.bluepal.response.ApiResponse;

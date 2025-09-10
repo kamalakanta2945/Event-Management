@@ -1,4 +1,4 @@
-THIS SHOULD BE A LINTER ERRORpackage com.bluepal.repository;
+package com.bluepal.repository;
 
 import com.bluepal.model.Event;
 import org.springframework.data.mongodb.repository.MongoRepository;
