@@ -28,16 +28,27 @@ const BookingsList = () => {
 
         console.log('Bookings API response:', response);
 
-        // Map _id to id for DataGrid
-        const mappedData = response.data.map((booking) => ({
+        // Normalize response to an array of bookings
+        const rawList = Array.isArray(response)
+          ? response
+          : Array.isArray(response?.data)
+          ? response.data
+          : Array.isArray(response?.bookings)
+          ? response.bookings
+          : [];
+
+        const mappedData = rawList.map((booking) => ({
           ...booking,
-          id: booking._id,
-          bookingDate: new Date(booking.bookingDate).toLocaleString(),
+          id: booking.id || booking._id,
+          bookingDate: booking.bookingDate
+            ? new Date(booking.bookingDate).toLocaleString()
+            : undefined,
         }));
 
         setBookings(mappedData);
       } catch (err) {
         console.error('Failed to fetch bookings:', err);
+        setBookings([]);
       } finally {
         setLoading(false);
       }
