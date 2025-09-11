@@ -1,6 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { Button, TextField, Typography, Box, Paper } from '@mui/material';
 import { searchEvents } from '../../services/eventService';
+import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import EventCard from './EventCard';
 import { VscSearch, VscLocation, VscCalendar } from 'react-icons/vsc';
@@ -24,8 +25,36 @@ const EventSearch = () => {
   }, []);
 
   const onSubmit = async (data) => {
-    const res = await searchEvents(data);
-    setResults(res);
+    try {
+      const params = { ...data };
+
+      // Normalize empty strings to undefined so they are omitted
+      Object.keys(params).forEach((key) => {
+        if (params[key] === '' || params[key] == null) delete params[key];
+      });
+
+      // Backend expects LocalDateTime; convert date-only to start/end of day ISO
+      const hasStart = Boolean(params.startDate);
+      const hasEnd = Boolean(params.endDate);
+
+      if (hasStart) params.startDate = `${params.startDate}T00:00:00`;
+      if (hasEnd) params.endDate = `${params.endDate}T23:59:59`;
+
+      if (hasStart && hasEnd) {
+        const start = new Date(params.startDate);
+        const end = new Date(params.endDate);
+        if (end < start) {
+          toast.error('End date cannot be earlier than start date');
+          return;
+        }
+      }
+
+      const res = await searchEvents(params);
+      setResults(Array.isArray(res) ? res : []);
+    } catch (err) {
+      toast.error(err?.response?.data?.message || 'Search failed');
+      setResults([]);
+    }
   };
 
   return (

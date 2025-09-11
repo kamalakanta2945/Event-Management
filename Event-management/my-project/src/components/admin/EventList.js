@@ -1,9 +1,13 @@
 // src/components/admin/EventList.js
 import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { Button } from '@mui/material';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
 import Loader from '../common/Loader';
 import { getAllEvents } from '../../services/eventService';
 import { format } from 'date-fns';
+import * as XLSX from 'xlsx';
 
 const EventList = () => {
   const [events, setEvents] = useState([]);
@@ -68,8 +72,48 @@ const EventList = () => {
         pageSize={5}
         rowsPerPageOptions={[5, 10, 20]}
       />
+      <div className="mt-4 flex gap-3">
+        <Button variant="contained" onClick={() => exportEventsToExcel(events)}>Export Excel</Button>
+        <Button variant="outlined" onClick={() => exportEventsToPdf(events)}>Export PDF</Button>
+      </div>
     </div>
   );
 };
 
 export default EventList;
+
+// Helpers
+function exportEventsToExcel(events) {
+  const rows = events.map(({ id, name, venue, eventDateTime, totalSeats, availableSeats, ticketPrice, isActive }) => ({
+    ID: id,
+    Name: name,
+    Venue: venue,
+    'Event Date': eventDateTime,
+    'Total Seats': totalSeats,
+    'Available Seats': availableSeats,
+    Price: ticketPrice,
+    Active: isActive,
+  }));
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Events');
+  XLSX.writeFile(workbook, 'events.xlsx');
+}
+
+function exportEventsToPdf(events) {
+  const doc = new jsPDF();
+  const columns = ['ID', 'Name', 'Venue', 'Event Date', 'Total Seats', 'Available Seats', 'Price', 'Active'];
+  const data = events.map(({ id, name, venue, eventDateTime, totalSeats, availableSeats, ticketPrice, isActive }) => [
+    id,
+    name,
+    venue,
+    eventDateTime,
+    totalSeats,
+    availableSeats,
+    ticketPrice,
+    isActive,
+  ]);
+  // @ts-ignore
+  doc.autoTable({ head: [columns], body: data, styles: { fontSize: 8 } });
+  doc.save('events.pdf');
+}

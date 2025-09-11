@@ -4,7 +4,7 @@ import { getUserRole } from '../utils/authUtils';
 import { ROLES } from '../utils/constants';
 import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { FaUser, FaTicketAlt, FaCrown, FaUsers, FaCalendarAlt, FaChartLine } from 'react-icons/fa';
+import { FaUser, FaTicketAlt, FaCrown, FaUsers, FaCalendarAlt, FaChartLine, FaMoneyBill } from 'react-icons/fa';
 import Header from '../components/common/Header'; // Import the Header component
 
 const Dashboard = () => {
@@ -121,6 +121,19 @@ const Dashboard = () => {
                       <div>
                         <h3 className="font-medium text-amber-100 group-hover:text-amber-50 transition-colors">Manage Events</h3>
                         <p className="text-sm text-gray-400 mt-1">Event creation and management</p>
+                      </div>
+                    </Link>
+
+                    <Link 
+                      to="/admin/payments" 
+                      className="flex items-center p-4 bg-gray-700/50 rounded-xl hover:bg-gradient-to-r hover:from-amber-900/30 hover:to-amber-800/20 transition-all duration-300 group border border-gray-700/50 hover:border-amber-500/30"
+                    >
+                      <div className="p-3 bg-gradient-to-r from-amber-700/50 to-amber-800/50 rounded-lg mr-4 group-hover:from-amber-600/50 group-hover:to-amber-700/50 transition-all duration-300">
+                        <FaMoneyBill className="h-5 w-5 text-amber-200" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-amber-100 group-hover:text-amber-50 transition-colors">Payments</h3>
+                        <p className="text-sm text-gray-400 mt-1">Payment history and verification</p>
                       </div>
                     </Link>
                     
