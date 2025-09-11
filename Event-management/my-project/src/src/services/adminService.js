@@ -15,7 +15,8 @@ import 'jspdf-autotable';
  * @returns {Promise} API response
  */
 export const addUser = async (data) => {
-  return api.post('/admin/add', data);
+  const res = await api.post('/admin/add', data);
+  return res.data?.data || res.data;
 };
 
 /**
@@ -25,7 +26,8 @@ export const addUser = async (data) => {
  * @returns {Promise} API response
  */
 export const updateUser = async (userId, data) => {
-  return api.post(`/admin/${userId}`, data);
+  const res = await api.post(`/admin/${userId}`, data);
+  return res.data?.data || res.data;
 };
 
 /**
@@ -34,7 +36,8 @@ export const updateUser = async (userId, data) => {
  * @returns {Promise} API response
  */
 export const updateUserStatus = async (userId) => {
-  return api.post(`/admin/updateStatus/${userId}`);
+  const res = await api.post(`/admin/updateStatus/${userId}`);
+  return res.data?.data || res.data;
 };
 
 /**
@@ -45,7 +48,8 @@ export const updateUserStatus = async (userId) => {
  * @returns {Promise} Paginated user data
  */
 export const getAllUsers = async (page = 0, size = 5, query = '') => {
-  return (await api.get('/admin/getByPage', { params: { page, size, query } })).data;
+  const res = await api.get('/admin/getByPage', { params: { page, size, query } });
+  return res.data?.data || res.data;
 };
 
 /**
@@ -54,7 +58,8 @@ export const getAllUsers = async (page = 0, size = 5, query = '') => {
  * @returns {Promise} User data object
  */
 export const getUserById = async (id) => {
-  return (await api.get(`/admin/byId/${id}`)).data;
+  const res = await api.get(`/admin/byId/${id}`);
+  return res.data?.data || res.data;
 };
 
 /**
@@ -63,7 +68,8 @@ export const getUserById = async (id) => {
  * @returns {Promise} API response
  */
 export const deleteUser = async (id) => {
-  return api.delete(`/admin/${id}`);
+  const res = await api.delete(`/admin/${id}`);
+  return res.data?.data || res.data;
 };
 
 // ==================== DATA EXPORT OPERATIONS ====================

@@ -6,8 +6,7 @@ import api from './api';
  */
 export const createEvent = async (data) => {
   const response = await api.post('/events', data);
-  // If your backend wraps data in ResponseWrapper, use response.data.data
-  return response.data; 
+  return response.data?.data || response.data; 
 };
 
 /**
@@ -16,7 +15,7 @@ export const createEvent = async (data) => {
  */
 export const getEventById = async (id) => {
   const response = await api.get(`/events/${id}`);
-  return response.data; // Use .data.data if backend wraps
+  return response.data?.data || response.data;
 };
 
 /**
@@ -24,8 +23,7 @@ export const getEventById = async (id) => {
  */
 export const getAllEvents = async () => {
   const response = await api.get('/events');
-  // Check if backend returns { message, data: [...] }
-  return response.data.data ? response.data.data : response.data;
+  return response.data?.data || response.data;
 };
 
 /**
@@ -33,15 +31,15 @@ export const getAllEvents = async () => {
  */
 export const getUpcomingEvents = async () => {
   const response = await api.get('/events/upcoming');
-  return response.data.data ? response.data.data : response.data;
+  return response.data?.data || response.data;
 };
 
 /**
  * Get events for the logged-in organizer
  */
 export const getEventsByOrganizer = async () => {
-    const response = await api.get('/events/my-events');
-    return response.data.data ? response.data.data : response.data;
+  const response = await api.get('/events/my-events');
+  return response.data?.data || response.data;
 };
 
 /**
@@ -50,7 +48,7 @@ export const getEventsByOrganizer = async () => {
  */
 export const searchEvents = async (params) => {
   const response = await api.get('/events/search', { params });
-  return response.data.data ? response.data.data : response.data;
+  return response.data?.data || response.data;
 };
 
 /**
@@ -60,7 +58,7 @@ export const searchEvents = async (params) => {
  */
 export const updateEvent = async (id, data) => {
   const response = await api.put(`/events/${id}`, data);
-  return response.data; // Use .data.data if backend wraps
+  return response.data?.data || response.data;
 };
 
 /**
@@ -69,5 +67,5 @@ export const updateEvent = async (id, data) => {
  */
 export const deleteEvent = async (id) => {
   const response = await api.delete(`/events/${id}`);
-  return response.data;
+  return response.data?.data || response.data;
 };

@@ -24,16 +24,16 @@ const UserProfileForm = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             try {
-                const { data } = await getUserProfile();
-                setValue('firstName', data.firstName);
-                setValue('middleName', data.middleName);
-                setValue('lastName', data.lastName);
-                setValue('email2', data.email2);
-                setValue('mobileNo1', data.mobileNo1);
-                setValue('mobileNo2', data.mobileNo2);
-                setValue('address', data.address);
-                setValue('bio', data.bio);
-                setValue('profilePictureUrl', data.profilePictureUrl);
+                const profile = await getUserProfile();
+                setValue('firstName', profile.firstName);
+                setValue('middleName', profile.middleName);
+                setValue('lastName', profile.lastName);
+                setValue('email2', profile.email2);
+                setValue('mobileNo1', profile.mobileNo1);
+                setValue('mobileNo2', profile.mobileNo2);
+                setValue('address', profile.address);
+                setValue('bio', profile.bio);
+                setValue('profilePictureUrl', profile.profilePictureUrl);
             } catch (error) {
                 toast.error('Failed to fetch user profile.');
             }

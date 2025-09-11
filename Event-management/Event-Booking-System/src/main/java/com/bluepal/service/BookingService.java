@@ -9,6 +9,7 @@ public interface BookingService {
     Booking getBookingById(String id);
     List<Booking> getBookingsByUserId(String userId);
     List<Booking> getBookingsByEventId(String eventId);
+    List<Booking> getAllBookings();
     Booking confirmBooking(String bookingId, String paymentId);
     Booking cancelBooking(String bookingId);
     List<String> selectSeats(SeatSelectionRequest request);

@@ -122,4 +122,36 @@ public class PaymentServiceImpl implements PaymentService {
     public java.util.List<com.bluepal.model.Payment> getAllPayments() {
         return paymentRepository.findAll();
     }
+
+    @Override
+    public Payment scanVerify(String razorpayOrderId, String razorpayPaymentId) {
+        try {
+            RazorpayClient client = new RazorpayClient(razorPayConfig.getKey(), razorPayConfig.getSecret());
+            com.razorpay.Payment rpPayment = client.payments.fetch(razorpayPaymentId);
+
+            Optional<Payment> paymentOpt = paymentRepository.findByRazorpayOrderId(razorpayOrderId);
+            if (!paymentOpt.isPresent()) {
+                throw new ResourceNotFoundException("Payment not found for order id: " + razorpayOrderId);
+            }
+
+            Payment payment = paymentOpt.get();
+
+            if ("captured".equalsIgnoreCase((String) rpPayment.get("status"))) {
+                payment.setRazorpayPaymentId(razorpayPaymentId);
+                payment.setStatus(PaymentStatus.SUCCESS);
+                payment.setPaymentDate(LocalDateTime.now());
+                try {
+                    bookingService.confirmBooking(payment.getBookingId(), razorpayPaymentId);
+                } catch (Exception ex) {
+                    payment.setStatus(PaymentStatus.FAILED);
+                }
+            } else {
+                payment.setStatus(PaymentStatus.FAILED);
+            }
+
+            return paymentRepository.save(payment);
+        } catch (RazorpayException e) {
+            throw new PaymentFailedException("Error scanning payment: " + e.getMessage());
+        }
+    }
 }

@@ -1,0 +1,34 @@
+version: '3.9'
+services:
+  mongo:
+    image: mongo:7
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+  backend:
+    build:
+      context: ./Event-management/Event-Booking-System
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo:27017/event-system
+      - RAZORPAY_KEY=${RAZORPAY_KEY}
+      - RAZORPAY_SECRET=${RAZORPAY_SECRET}
+      - SERVER_PORT=4041
+    depends_on:
+      - mongo
+    ports:
+      - "4041:4041"
+
+  frontend:
+    build:
+      context: ./Event-management/my-project
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+
+volumes:
+  mongo_data:
+

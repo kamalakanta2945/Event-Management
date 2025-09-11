@@ -400,6 +400,8 @@
 
 
 import { useState, useMemo, useCallback, memo, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getEventById } from '../../services/eventService';
 import { Button, Typography, Box, Paper, CircularProgress, Stepper, Step, StepLabel, TextField, Grid, Card, CardContent } from '@mui/material';
 import { VscCheck, VscRefresh, VscArrowLeft, VscSearch } from 'react-icons/vsc';
 
@@ -1158,12 +1160,37 @@ const ConfirmationStep = ({ bookingData, onNewBooking }) => {
 
 // Main Event Booking Flow Component
 const EventBookingFlow = () => {
+  const { eventId } = useParams();
   const [activeStep, setActiveStep] = useState(0);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [bookingData, setBookingData] = useState(null);
   const [paymentData, setPaymentData] = useState(null);
 
   const steps = ['Search Event', 'Select Seats', 'Booking Information', 'Payment', 'Confirmation'];
+
+  useEffect(() => {
+    const initFromRoute = async () => {
+      if (!eventId) return;
+      try {
+        const res = await getEventById(eventId);
+        const event = res?.data || res;
+        // Map backend event shape to local step shape
+        const mapped = {
+          id: event.id,
+          name: event.name,
+          venue: event.venue,
+          date: event.eventDateTime ? event.eventDateTime.split('T')[0] : '',
+          time: event.eventDateTime ? event.eventDateTime.split('T')[1]?.slice(0,5) : '',
+          price: event.ticketPrice
+        };
+        setSelectedEvent(mapped);
+        setActiveStep(1);
+      } catch (e) {
+        // fallback: keep search step
+      }
+    };
+    initFromRoute();
+  }, [eventId]);
 
   const handleEventSelect = (event) => {
     console.log('Event selected:', event);

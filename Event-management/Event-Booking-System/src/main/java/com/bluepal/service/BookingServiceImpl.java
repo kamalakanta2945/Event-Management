@@ -60,6 +60,11 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    public List<Booking> getAllBookings() {
+        return bookingRepository.findAll();
+    }
+
+    @Override
     public Booking confirmBooking(String bookingId, String paymentId) {
         Booking booking = getBookingById(bookingId);
         booking.setStatus(BookingStatus.CONFIRMED);

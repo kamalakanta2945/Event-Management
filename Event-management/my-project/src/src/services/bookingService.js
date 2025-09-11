@@ -8,7 +8,8 @@ import { toast } from 'react-toastify';
  */
 export const createBooking = async (data) => {
   try {
-    return (await api.post('/bookings', data)).data;
+    const res = await api.post('/bookings', data);
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Failed to create booking');
     throw error;
@@ -21,7 +22,8 @@ export const createBooking = async (data) => {
  */
 export const getBookingById = async (id) => {
   try {
-    return (await api.get(`/bookings/${id}`)).data;
+    const res = await api.get(`/bookings/${id}`);
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Failed to fetch booking');
     throw error;
@@ -36,7 +38,8 @@ export const getBookingsByUser = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
     if (!user) throw new Error('User not logged in');
     const userId = user.id;
-    return (await api.get(`/bookings/user/${userId}`)).data;
+    const res = await api.get(`/bookings/user/${userId}`);
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || error.message || 'Failed to fetch user bookings');
     throw error;
@@ -49,7 +52,8 @@ export const getBookingsByUser = async () => {
  */
 export const getBookingsByEventId = async (eventId) => {
   try {
-    return (await api.get(`/bookings/event/${eventId}`)).data;
+    const res = await api.get(`/bookings/event/${eventId}`);
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Failed to fetch event bookings');
     throw error;
@@ -62,7 +66,8 @@ export const getBookingsByEventId = async (eventId) => {
  */
 export const selectSeats = async (data) => {
   try {
-    return (await api.post('/bookings/select-seats', data)).data;
+    const res = await api.post('/bookings/select-seats', data);
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Seat selection failed');
     throw error;
@@ -76,7 +81,8 @@ export const selectSeats = async (data) => {
  */
 export const confirmBooking = async (bookingId, paymentId) => {
   try {
-    return (await api.post(`/bookings/${bookingId}/confirm`, null, { params: { paymentId } })).data;
+    const res = await api.post(`/bookings/${bookingId}/confirm`, null, { params: { paymentId } });
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Failed to confirm booking');
     throw error;
@@ -89,7 +95,8 @@ export const confirmBooking = async (bookingId, paymentId) => {
  */
 export const cancelBooking = async (bookingId) => {
   try {
-    return (await api.post(`/bookings/${bookingId}/cancel`)).data;
+    const res = await api.post(`/bookings/${bookingId}/cancel`);
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Failed to cancel booking');
     throw error;
@@ -101,7 +108,8 @@ export const cancelBooking = async (bookingId) => {
  */
 export const getAllBookings = async () => {
   try {
-    return (await api.get('/bookings')).data;
+    const res = await api.get('/bookings');
+    return res.data?.data || res.data;
   } catch (error) {
     toast.error(error.response?.data?.message || 'Failed to fetch all bookings');
     throw error;

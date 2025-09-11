@@ -24,6 +24,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import UserManagement from './components/admin/UserManagement';
 import EventManagement from './components/admin/EventManagement';
 import BookingManagement from './components/admin/BookingManagement';
+import Sitemap from './pages/Sitemap';
 
 const AppRoutes = () => {
   return (
@@ -76,6 +77,8 @@ const AppRoutes = () => {
                   <PaymentForm />
                 </PrivateRoute>
               } />
+
+              <Route path="/sitemap" element={<Sitemap />} />
               
               {/* Admin Routes */}
               <Route path="/admin" element={

@@ -19,6 +19,7 @@ import com.bluepal.response.RazorPayOrderResponse;
 import com.bluepal.service.PaymentService;
 import com.bluepal.util.ResponseWrapper;
 import com.razorpay.RazorpayException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/payments")
@@ -60,5 +61,22 @@ public class PaymentController {
 	public ResponseEntity<ResponseWrapper<Payment>> getPaymentByBookingId(@PathVariable String bookingId) {
 		Payment payment = paymentService.getPaymentByBookingId(bookingId);
 		return ResponseEntity.ok(new ResponseWrapper<>("Payment retrieved successfully", payment));
+	}
+
+	@GetMapping
+	public ResponseEntity<ResponseWrapper<List<Payment>>> getAllPayments() {
+		List<Payment> payments = paymentService.getAllPayments();
+		return ResponseEntity.ok(new ResponseWrapper<>("Payments retrieved successfully", payments));
+	}
+
+	@PostMapping("/scan-verify")
+	public ResponseEntity<ResponseWrapper<Payment>> scanVerify(@RequestParam String razorpayOrderId,
+			@RequestParam String razorpayPaymentId) {
+		try {
+			Payment payment = paymentService.scanVerify(razorpayOrderId, razorpayPaymentId);
+			return ResponseEntity.ok(new ResponseWrapper<>("Scan verification successful", payment));
+		} catch (Exception e) {
+			return ResponseEntity.badRequest().body(new ResponseWrapper<>(e.getMessage(), null));
+		}
 	}
 }
