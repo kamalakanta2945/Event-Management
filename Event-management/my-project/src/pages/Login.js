@@ -1,5 +1,6 @@
 import LoginForm from '../components/auth/LoginForm';
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 
 const Login = () => {
   const [currentBg, setCurrentBg] = useState(0);
@@ -50,14 +51,14 @@ const Login = () => {
           <div className="mt-6 text-center">
             <p className="text-gray-600">
               Don't have an account?{' '}
-              <a href="/signup" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+              <Link to="/signup" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                 Sign up
-              </a>
+              </Link>
             </p>
             <p className="text-gray-600 mt-2">
-              <a href="/forgot-password" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+              <Link to="/forgot-password" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
                 Forgot your password?
-              </a>
+              </Link>
             </p>
           </div>
         </div>
