@@ -1,25 +1,25 @@
-import PrivateRoute from './src/components/common/PrivateRoute';
-import Layout from './src/components/common/Layout';
+import PrivateRoute from './components/common/PrivateRoute';
+import Layout from './components/common/Layout';
 
-import Home from './src/pages/Home';
-import Login from './src/pages/Login';
-import Signup from './src/pages/Signup';
-import ForgotPasswordPage from './src/pages/ForgotPasswordPage';
-import ResetPasswordPage from './src/pages/ResetPasswordPage';
-import Dashboard from './src/pages/Dashboard';
-import Events from './src/pages/Events';
-import EventDetails from './src/pages/EventDetails';
-import Bookings from './src/pages/Bookings';
-import AdminUsers from './src/pages/AdminUsers';
-import AdminEvents from './src/pages/AdminEvents';
-import AdminBookings from './src/pages/AdminBookings';
-import AdminPayments from './src/pages/AdminPayments';
-import NotFound from './src/pages/NotFound';
-import ProfilePage from './src/pages/ProfilePage';
-import MyEventsPage from './src/pages/MyEventsPage';
-import EventForm from './src/components/event/EventForm';
-import Sitemap from './src/pages/Sitemap';
-import Scanner from './src/components/admin/Scanner';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
+import ResetPasswordPage from './pages/ResetPasswordPage';
+import Dashboard from './pages/Dashboard';
+import Events from './pages/Events';
+import EventDetails from './pages/EventDetails';
+import Bookings from './pages/Bookings';
+import AdminUsers from './pages/AdminUsers';
+import AdminEvents from './pages/AdminEvents';
+import AdminBookings from './pages/AdminBookings';
+import AdminPayments from './pages/AdminPayments';
+import NotFound from './pages/NotFound';
+import ProfilePage from './pages/ProfilePage';
+import MyEventsPage from './pages/MyEventsPage';
+import EventForm from './components/event/EventForm';
+import Sitemap from './pages/Sitemap';
+import Scanner from './components/admin/Scanner';
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
   

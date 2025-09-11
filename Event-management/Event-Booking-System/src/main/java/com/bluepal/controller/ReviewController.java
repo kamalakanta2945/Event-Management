@@ -21,7 +21,7 @@ public class ReviewController {
     private IAuthService authService;
 
     @PostMapping
-    public ResponseEntity<ResponseWrapper<Review>> addReview(@RequestBody ReviewRequest reviewRequest, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<ResponseWrapper<Review>> addReview(@RequestBody ReviewRequest reviewRequest, @RequestHeader("Authorization") String jwt) throws Exception {
         UserModel user = authService.findUserProfileByJwt(jwt);
         Review newReview = reviewService.addReview(
                 reviewRequest.getEventId(),

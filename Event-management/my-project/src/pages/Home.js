@@ -1,35 +1,15 @@
 import UpcomingEvents from '../components/event/UpcomingEvents';
-import { useState, useEffect } from 'react';
+import HeroCarousel from '../components/common/HeroCarousel';
 
 const Home = () => {
-  const [currentBg, setCurrentBg] = useState(0);
   
-  const backgroundImages = [
-    'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=2070&q=80',
-    'https://images.unsplash.com/photo-1540575467063-178a50fc2cf7?auto=format&fit=crop&w=2070&q=80',
-    'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=2069&q=80'
-  ];
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentBg((prev) => (prev + 1) % backgroundImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background Carousel */}
-      <div 
-        className="fixed inset-0 bg-cover bg-center transition-all duration-1000 ease-in-out"
-        style={{ backgroundImage: `url(${backgroundImages[currentBg]})` }}
-      ></div>
-      
-      {/* Dark Overlay */}
-      <div className="fixed inset-0 bg-black bg-opacity-60"></div>
-      
-      {/* Content Container */}
-      <div className="relative z-10 container mx-auto px-4 py-12">
+      <div className="container mx-auto px-4 py-8">
+        <HeroCarousel />
+      </div>
+      <div className="relative z-10 container mx-auto px-4 pb-12">
         <div className="text-center mb-12">
           <div className="flex justify-center mb-6">
             <div className="p-5 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-full shadow-xl">
