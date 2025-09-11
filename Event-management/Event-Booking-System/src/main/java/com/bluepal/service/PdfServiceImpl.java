@@ -43,12 +43,14 @@ public class PdfServiceImpl implements PdfService {
             table.setWidths(new int[]{1, 3});
 
             addTableRow(table, "Booking ID", booking.getId());
-            addTableRow(table, "Event", booking.getEvent().getName());
-            addTableRow(table, "Venue", booking.getEvent().getVenue());
-            addTableRow(table, "Date", booking.getEvent().getEventDateTime().toString());
-            addTableRow(table, "Seats", booking.getSeats().stream().map(s -> s.getSeatNumber()).collect(Collectors.joining(", ")));
-            addTableRow(table, "Total Price", "$" + booking.getTotalPrice());
-            addTableRow(table, "Status", booking.getStatus());
+            addTableRow(table, "Event ID", booking.getEventId());
+            addTableRow(table, "User Email", booking.getUserEmail());
+            addTableRow(table, "Booking Date", booking.getBookingDate() != null ? booking.getBookingDate().toString() : "");
+            addTableRow(table, "Seats", booking.getSeatNumbers() != null ? booking.getSeatNumbers().stream().collect(Collectors.joining(", ")) : "");
+            addTableRow(table, "Tickets", String.valueOf(booking.getNumberOfTickets()));
+            addTableRow(table, "Total Amount", "$" + booking.getTotalAmount());
+            addTableRow(table, "Status", booking.getStatus() != null ? booking.getStatus().name() : "");
+            addTableRow(table, "Payment ID", booking.getPaymentId());
 
             document.add(table);
 

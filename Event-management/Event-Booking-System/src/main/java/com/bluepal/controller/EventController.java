@@ -25,7 +25,7 @@ public class EventController {
     private IAuthService authService;
     
     @PostMapping
-    public ResponseEntity<ResponseWrapper<Event>> createEvent(@RequestBody Event event, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<ResponseWrapper<Event>> createEvent(@RequestBody Event event, @RequestHeader("Authorization") String jwt) throws Exception {
         UserModel user = authService.findUserProfileByJwt(jwt);
         if (user.getRole() != USER_ROLE.ROLE_ADMIN && user.getRole() != USER_ROLE.ROLE_ORGANIZER) {
             throw new AccessDeniedException("You are not authorized to create an event.");
@@ -64,7 +64,7 @@ public class EventController {
     }
     
     @GetMapping("/my-events")
-    public ResponseEntity<ResponseWrapper<List<Event>>> getMyEvents(@RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<ResponseWrapper<List<Event>>> getMyEvents(@RequestHeader("Authorization") String jwt) throws Exception {
         UserModel user = authService.findUserProfileByJwt(jwt);
         if (user.getRole() != USER_ROLE.ROLE_ADMIN && user.getRole() != USER_ROLE.ROLE_ORGANIZER) {
             throw new AccessDeniedException("You are not authorized to view organizer events.");
@@ -74,14 +74,14 @@ public class EventController {
     }
     
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<Event>> updateEvent(@PathVariable String id, @RequestBody Event event, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<ResponseWrapper<Event>> updateEvent(@PathVariable String id, @RequestBody Event event, @RequestHeader("Authorization") String jwt) throws Exception {
         UserModel user = authService.findUserProfileByJwt(jwt);
         Event updatedEvent = eventService.updateEvent(id, event, user.getId());
         return ResponseEntity.ok(new ResponseWrapper<>("Event updated successfully", updatedEvent));
     }
     
     @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseWrapper<Void>> deleteEvent(@PathVariable String id, @RequestHeader("Authorization") String jwt) {
+    public ResponseEntity<ResponseWrapper<Void>> deleteEvent(@PathVariable String id, @RequestHeader("Authorization") String jwt) throws Exception {
         UserModel user = authService.findUserProfileByJwt(jwt);
         eventService.deleteEvent(id, user.getId());
         return ResponseEntity.ok(new ResponseWrapper<>("Event deleted successfully", null));
