@@ -46,11 +46,13 @@ export const signup = async (data) => {
 
 
 export const forgotPassword = async (email) => {
-  return api.post('/auth/forgot', { email });
+  // Backend expects email as query param
+  return api.post('/auth/forgot', null, { params: { email } });
 };
 
 export const resetPassword = async (token, newPassword) => {
-  return api.post('/auth/reset', { token, newPassword });
+  // Backend expects token & newPassword as query params
+  return api.post('/auth/reset', null, { params: { token, newPassword } });
 };
 
 export const changePassword = async (data) => {

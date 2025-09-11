@@ -1,6 +1,10 @@
 // src/components/user/BookingsList.js
 import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
+import { Button } from '@mui/material';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import * as XLSX from 'xlsx';
 import Loader from '../common/Loader';
 import { getBookingsByUser, getAllBookings } from '../../services/bookingService';
 
@@ -77,8 +81,44 @@ const BookingsList = () => {
         rowsPerPageOptions={[10, 20, 50]}
         autoHeight
       />
+      <div className="mt-4 flex gap-3">
+        <Button variant="contained" onClick={() => exportBookingsToExcel(bookings)}>Export Excel</Button>
+        <Button variant="outlined" onClick={() => exportBookingsToPdf(bookings)}>Export PDF</Button>
+      </div>
     </div>
   );
 };
 
 export default BookingsList;
+
+// Helpers
+function exportBookingsToExcel(bookings) {
+  const rows = bookings.map(({ id, eventId, numberOfTickets, totalAmount, status, bookingDate }) => ({
+    'Booking ID': id,
+    'Event ID': eventId,
+    Tickets: numberOfTickets,
+    Amount: totalAmount,
+    Status: status,
+    'Booking Date': bookingDate,
+  }));
+  const worksheet = XLSX.utils.json_to_sheet(rows);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Bookings');
+  XLSX.writeFile(workbook, 'bookings.xlsx');
+}
+
+function exportBookingsToPdf(bookings) {
+  const doc = new jsPDF();
+  const columns = ['Booking ID', 'Event ID', 'Tickets', 'Amount', 'Status', 'Booking Date'];
+  const data = bookings.map(({ id, eventId, numberOfTickets, totalAmount, status, bookingDate }) => [
+    id,
+    eventId,
+    numberOfTickets,
+    totalAmount,
+    status,
+    bookingDate,
+  ]);
+  // @ts-ignore
+  doc.autoTable({ head: [columns], body: data, styles: { fontSize: 8 } });
+  doc.save('bookings.pdf');
+}
