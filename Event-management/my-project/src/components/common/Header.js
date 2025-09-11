@@ -6,7 +6,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import PaymentIcon from '@mui/icons-material/Payment';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { removeToken, isAuthenticated, getUserRole } from '../../utils/authUtils';
 import { ROLES } from '../../utils/constants';
 import { toast } from 'react-toastify';
@@ -48,9 +48,9 @@ const Header = () => {
         <Box className="flex items-center space-x-1 md:space-x-2">
           <Button 
             color="inherit" 
-            component={Link} 
+            component={NavLink} 
             to="/events"
-            className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300 flex items-center"
+            className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300 flex items-center`}
           >
             <EventIcon className="mr-1 text-sm text-amber-300" />
             <span className="hidden sm:inline">Events</span>
@@ -60,9 +60,9 @@ const Header = () => {
             <>
               <Button 
                 color="inherit" 
-                component={Link} 
+                component={NavLink} 
                 to="/dashboard"
-                className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300 flex items-center"
+                className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300 flex items-center`}
               >
                 <DashboardIcon className="mr-1 text-sm text-amber-300" />
                 <span className="hidden sm:inline">Dashboard</span>
@@ -70,9 +70,9 @@ const Header = () => {
               
               <Button 
                 color="inherit" 
-                component={Link} 
+                component={NavLink} 
                 to="/bookings"
-                className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300"
+                className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300`}
               >
                 <span className="hidden sm:inline">My Bookings</span>
               </Button>
@@ -80,9 +80,9 @@ const Header = () => {
               {(role === ROLES.ADMIN || role === ROLES.ORGANIZER) && (
                 <Button
                   color="inherit"
-                  component={Link}
+                  component={NavLink}
                   to="/my-events"
-                  className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300"
+                  className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300`}
                 >
                   <span className="hidden sm:inline">My Events</span>
                 </Button>
@@ -92,9 +92,9 @@ const Header = () => {
                 <>
                   <Button 
                     color="inherit" 
-                    component={Link} 
+                    component={NavLink} 
                     to="/admin/users"
-                    className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300 flex items-center"
+                    className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300 flex items-center`}
                   >
                     <PeopleIcon className="mr-1 text-sm text-amber-300" />
                     <span className="hidden sm:inline">Users</span>
@@ -102,9 +102,9 @@ const Header = () => {
                   
                   <Button 
                     color="inherit" 
-                    component={Link} 
+                    component={NavLink} 
                     to="/admin/events"
-                    className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300 flex items-center"
+                    className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300 flex items-center`}
                   >
                     <EventIcon className="mr-1 text-sm text-amber-300" />
                     <span className="hidden sm:inline">Events</span>
@@ -112,18 +112,18 @@ const Header = () => {
                   
                   <Button 
                     color="inherit" 
-                    component={Link} 
+                    component={NavLink} 
                     to="/admin/bookings"
-                    className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300"
+                    className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300`}
                   >
                     <span className="hidden sm:inline">Bookings</span>
                   </Button>
                   
                   <Button 
                     color="inherit" 
-                    component={Link} 
+                    component={NavLink} 
                     to="/admin/payments"
-                    className="text-amber-100 hover:bg-amber-900/30 rounded-lg px-3 py-1 transition-all duration-300 flex items-center"
+                    className={({ isActive }) => `text-amber-100 ${isActive ? 'bg-amber-900/40' : 'hover:bg-amber-900/30'} rounded-lg px-3 py-1 transition-all duration-300 flex items-center`}
                   >
                     <PaymentIcon className="mr-1 text-sm text-amber-300" />
                     <span className="hidden sm:inline">Payments</span>

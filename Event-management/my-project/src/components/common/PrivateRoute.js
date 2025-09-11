@@ -1,7 +1,9 @@
 import { Navigate, Outlet } from 'react-router-dom';
 import { isAuthenticated, getUserRole } from '../../utils/authUtils';
 
-const PrivateRoute = ({ roles = [] }) => {
+// Supports both wrapper usage: <PrivateRoute><Page/></PrivateRoute>
+// and route-outlet usage: <Route element={<PrivateRoute roles={[...]}/>}>...
+const PrivateRoute = ({ roles = [], children }) => {
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
@@ -11,7 +13,8 @@ const PrivateRoute = ({ roles = [] }) => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  return <Outlet />;
+  // If children are provided, render them (wrapper pattern). Otherwise, render Outlet (nested routes pattern)
+  return children ? children : <Outlet />;
 };
 
 export default PrivateRoute;
