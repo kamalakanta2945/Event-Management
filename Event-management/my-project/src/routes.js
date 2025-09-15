@@ -24,6 +24,7 @@ import AdminDashboard from './components/admin/AdminDashboard';
 import UserManagement from './components/admin/UserManagement';
 import EventManagement from './components/admin/EventManagement';
 import BookingManagement from './components/admin/BookingManagement';
+import BulkImport from './components/admin/BulkImport';
 import Sitemap from './pages/Sitemap';
 
 const AppRoutes = () => {
@@ -99,6 +100,11 @@ const AppRoutes = () => {
               <Route path="/admin/bookings" element={
                 <PrivateRoute roles={['ROLE_ADMIN']}>
                   <BookingManagement />
+                </PrivateRoute>
+              } />
+              <Route path="/admin/import" element={
+                <PrivateRoute roles={['ROLE_ADMIN']}>
+                  <BulkImport />
                 </PrivateRoute>
               } />
               
