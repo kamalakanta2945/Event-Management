@@ -9,7 +9,7 @@ public class AuthRequest {
 
     @NotBlank
     @Email
-    private String email1;
+    private String email;
 
     @NotBlank
     private String password;

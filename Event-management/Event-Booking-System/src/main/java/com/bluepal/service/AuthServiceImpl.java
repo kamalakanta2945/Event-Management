@@ -55,19 +55,19 @@ public class AuthServiceImpl implements IAuthService {
     @Override
     @CacheEvict(value = "users", key = "#result.id",allEntries = true)
     public AuthResponse registerUser(UserRequest createUserReq) throws UserException {
-        log.info("Received signup request for email: {}", createUserReq.getEmail1());
+        log.info("Received signup request for email: {}", createUserReq.getEmail());
 
-        UserModel isEmailExist = userRepo.findByEmail1(createUserReq.getEmail1());
+        UserModel isEmailExist = userRepo.findByEmail(createUserReq.getEmail());
 
         if (isEmailExist != null) {
-            log.error(appProperties.getSignupEmailExist(), createUserReq.getEmail1());
+            log.error(appProperties.getSignupEmailExist(), createUserReq.getEmail());
             throw new UserException(appProperties.getSignupEmailExist());
         }
 
-        log.info("Creating new user with email: {}", createUserReq.getEmail1());
+        log.info("Creating new user with email: {}", createUserReq.getEmail());
 
         UserModel createdUser = new UserModel();
-        createdUser.setEmail1(createUserReq.getEmail1());
+        createdUser.setEmail(createUserReq.getEmail());
         createdUser.setEmail2(createUserReq.getEmail2());
         createdUser.setFirstName(createUserReq.getFirstName());
         createdUser.setMiddleName(createUserReq.getMiddleName());
@@ -82,13 +82,13 @@ public class AuthServiceImpl implements IAuthService {
         createdUser.setCreatedBy(savedUser.getId());
         userRepo.save(createdUser);
 
-        log.info(appProperties.getSignupUserCreated(), savedUser.getEmail1());
+        log.info(appProperties.getSignupUserCreated(), savedUser.getEmail());
 
-        Authentication authentication = new UsernamePasswordAuthenticationToken(savedUser.getEmail1(), savedUser.getPassword());
+        Authentication authentication = new UsernamePasswordAuthenticationToken(savedUser.getEmail(), savedUser.getPassword());
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String token = JwtProvider.generateToken(authentication);
-        log.info(String.format(appProperties.getJwtGenerated(), savedUser.getEmail1()));
+        log.info(String.format(appProperties.getJwtGenerated(), savedUser.getEmail()));
 
         AuthResponse response = new AuthResponse();
         response.setJwt(token);
@@ -101,9 +101,9 @@ public class AuthServiceImpl implements IAuthService {
     @Override
   //  @CacheEvict(value = "users",allEntries = true)
     public AuthResponse loginUser(AuthRequest request) {
-        log.info("Received signin request for email: {}", request.getEmail1());
+        log.info("Received signin request for email: {}", request.getEmail());
 
-        String username = request.getEmail1();
+        String username = request.getEmail();
         String password = request.getPassword();
 
         Authentication authentication = authenticate(username, password);
@@ -187,7 +187,7 @@ public class AuthServiceImpl implements IAuthService {
       log.info("Finding user profile by JWT: {}", jwt);
 
       String email = JwtProvider.getEmailFromJwtToken(jwt);
-      UserModel userEntity = userRepo.findByEmail1(email);
+      UserModel userEntity = userRepo.findByEmail(email);
 
       log.info("User profile retrieved for JWT: {}", jwt);
       return userEntity;
@@ -201,7 +201,7 @@ public class AuthServiceImpl implements IAuthService {
       }
 
       // Check if the user exists
-      UserModel isUserExist = userRepo.findByEmail1(email);
+      UserModel isUserExist = userRepo.findByEmail(email);
       if (isUserExist == null) {
           throw new UsernameNotFoundException("User not found with the email: " + email);
       }

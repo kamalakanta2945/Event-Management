@@ -22,7 +22,7 @@ public class UserRequest {
 
     @NotBlank(message = "Email is required")
     @Email(message = "Email should be valid")
-    private String email1;
+    private String email;
 
     @Email(message = "Email2 should be valid")
     private String email2;

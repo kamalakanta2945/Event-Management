@@ -116,7 +116,7 @@ public class AuthRestController {
         UserModel user = tokenOptional.get().getUser().get();
         authService.updatePassword(user, newPassword);
 
-        log.info(appProperties.getResetSuccess(), user.getEmail1());
+        log.info(appProperties.getResetSuccess(), user.getEmail());
 
         ApiResponse res = new ApiResponse();
         res.setMessage(appProperties.getResetSuccess());

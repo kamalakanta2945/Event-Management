@@ -29,7 +29,7 @@ public class UserModel {
 
     private USER_ROLE role;
 
-    private String email1;
+    private String email;
     private String email2;
 
     private Long mobileNo1;

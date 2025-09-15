@@ -9,9 +9,9 @@ import com.bluepal.model.UserModel; // make sure the package matches your model
 
 public interface UserRepository extends MongoRepository<UserModel, String> {
     
-    Optional<UserModel> findByEmail1(String email);
+    Optional<UserModel> findByEmail(String email);
     
-    boolean existsByEmail1(String email);
+    boolean existsByEmail(String email);
 
 	static Optional<ResetPasswordTokenEntity> findByToken(String token) {
 		// TODO Auto-generated method stub
