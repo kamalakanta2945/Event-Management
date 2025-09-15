@@ -75,12 +75,16 @@ public class AuthServiceImpl implements IAuthService {
         createdUser.setMobileNo1(createUserReq.getMobileNo1());
         createdUser.setMobileNo2(createUserReq.getMobileNo2());
         createdUser.setPassword(passwordEncoder.encode(createUserReq.getPassword()));
-        createdUser.setRole(createUserReq.getRole());
+        if (createUserReq.getRole() == null || createUserReq.getRole().isEmpty()) {
+            createdUser.setRole(USER_ROLE.ROLE_USER.toString());
+        } else {
+            createdUser.setRole(createUserReq.getRole());
+        }
 
         UserModel savedUser = userRepo.save(createdUser);
 
-        createdUser.setCreatedBy(savedUser.getId());
-        userRepo.save(createdUser);
+        savedUser.setCreatedBy(savedUser.getId());
+        userRepo.save(savedUser);
 
         log.info(appProperties.getSignupUserCreated(), savedUser.getEmail());
 
