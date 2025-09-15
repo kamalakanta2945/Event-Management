@@ -14,10 +14,9 @@ const LoginForm = () => {
 
   const onSubmit = async (data) => {
     try {
-      await login(data.email1, data.password);
+      await login(data.email, data.password);
       navigate('/dashboard');
-    } catch (err) {
-      // Handled in service
+    } catch (err)      // Handled in service
     }
   };
 
@@ -56,9 +55,9 @@ const LoginForm = () => {
               label="Email"
               variant="outlined"
               fullWidth
-              {...register('email1')}
-              error={!!errors.email1}
-              helperText={errors.email1?.message}
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
               className="pl-10"
               InputProps={{
                 className: 'rounded-lg'

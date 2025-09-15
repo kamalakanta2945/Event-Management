@@ -28,7 +28,7 @@ public class CustomUserServiceImpl  implements UserDetailsService{
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		
-		UserModel user = userRepo.findByEmail1(username);
+		UserModel user = userRepo.findByEmail(username);
 		if(user==null) {
 			throw new UsernameNotFoundException("User not found with the email"+username);
 		}
@@ -39,7 +39,7 @@ public class CustomUserServiceImpl  implements UserDetailsService{
 		
 		authorities.add(new SimpleGrantedAuthority(role.toString()));
 		
-		return new User(user.getEmail1(),user.getPassword(),authorities);
+		return new User(user.getEmail(),user.getPassword(),authorities);
 	}
 
 	

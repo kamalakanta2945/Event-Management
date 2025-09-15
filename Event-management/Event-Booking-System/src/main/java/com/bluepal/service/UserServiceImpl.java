@@ -64,16 +64,16 @@ public class UserServiceImpl implements IUserService {
 
 	@CacheEvict(value = "users", key = "#result.id", allEntries = true)
 	public UserModel addUser(UserRequest addUser, String id) throws UserException {
-		log.info("Adding user with email: {} by admin with id: {}", addUser.getEmail1(), id);
+		log.info("Adding user with email: {} by admin with id: {}", addUser.getEmail(), id);
 
-		UserModel isEmailExist = userRepo.findByEmail1(addUser.getEmail1());
+		UserModel isEmailExist = userRepo.findByEmail(addUser.getEmail());
 
 		if (isEmailExist != null) {
-			log.error(appProperties.getAddUserEmailExist(), addUser.getEmail1());
+			log.error(appProperties.getAddUserEmailExist(), addUser.getEmail());
 			throw new UserException(appProperties.getAddUserEmailExist());
 		}
 		UserModel createdUser = new UserModel();
-		createdUser.setEmail1(addUser.getEmail1());
+		createdUser.setEmail(addUser.getEmail());
 		createdUser.setEmail2(addUser.getEmail2());
 		createdUser.setFirstName(addUser.getFirstName());
 		createdUser.setMiddleName(addUser.getMiddleName());
@@ -90,10 +90,10 @@ public class UserServiceImpl implements IUserService {
 
 		String subject = appProperties.getRegistrationSuccessSubject();
 		String fileName = "REG-EMAIL-BODY.txt";
-		String body = readEmailBody(saveUser.fullName(), saveUser.getEmail1(), addUser.getPassword(), fileName);
-		emailUtils.sendEmail(addUser.getEmail1(), subject, body);
+		String body = readEmailBody(saveUser.fullName(), saveUser.getEmail(), addUser.getPassword(), fileName);
+		emailUtils.sendEmail(addUser.getEmail(), subject, body);
 
-		log.info(appProperties.getAddedSuccessMessage(), addUser.getEmail1(), saveUser.getId());
+		log.info(appProperties.getAddedSuccessMessage(), addUser.getEmail(), saveUser.getId());
 		return saveUser;
 	}
 
@@ -102,7 +102,7 @@ public class UserServiceImpl implements IUserService {
 	public UserModel findUserByEmail(String email) throws UserException {
 		log.info("Finding user by email: {}", email);
 
-		UserModel entity = userRepo.findByEmail1(email);
+		UserModel entity = userRepo.findByEmail(email);
 		if (entity == null) {
 			log.error(appProperties.getNotFoundMessage(), email);
 			throw new UserException(appProperties.getNotFoundMessage() + email);
@@ -163,8 +163,8 @@ public class UserServiceImpl implements IUserService {
 			existingUser.setLastName(updateRequest.getLastName());
 		}
 
-		if (updateRequest.getEmail1() != null) {
-			existingUser.setEmail1(updateRequest.getEmail1());
+		if (updateRequest.getEmail() != null) {
+			existingUser.setEmail(updateRequest.getEmail());
 		}
 
 		if (updateRequest.getEmail2() != null) {
@@ -330,7 +330,7 @@ public class UserServiceImpl implements IUserService {
 
 		HSSFRow headerRow = sheet.createRow(0);
 		headerRow.createCell(0).setCellValue("Name");
-		headerRow.createCell(1).setCellValue("EMAIL1");
+		headerRow.createCell(1).setCellValue("EMAIL");
 		headerRow.createCell(2).setCellValue("EMAIL2");
 		headerRow.createCell(3).setCellValue("MOBILE_NO1");
 		headerRow.createCell(4).setCellValue("MOBILE_NO2");
@@ -343,7 +343,7 @@ public class UserServiceImpl implements IUserService {
 			HSSFRow dataRow = sheet.createRow(i);
 
 			dataRow.createCell(0).setCellValue(entity.fullName() != null ? entity.fullName() : "");
-			dataRow.createCell(1).setCellValue(entity.getEmail1() != null ? entity.getEmail1() : "");
+			dataRow.createCell(1).setCellValue(entity.getEmail() != null ? entity.getEmail() : "");
 			dataRow.createCell(2).setCellValue(entity.getEmail2() != null ? entity.getEmail2() : "");
 
 			// Handle mobileNo1 (numeric type) safely
@@ -411,7 +411,7 @@ public class UserServiceImpl implements IUserService {
 
 		cell.setPhrase(new Phrase("Name", font));
 		table.addCell(cell);
-		cell.setPhrase(new Phrase("EMAIL1", font));
+		cell.setPhrase(new Phrase("EMAIL", font));
 		table.addCell(cell);
 		cell.setPhrase(new Phrase("EMAIL2", font));
 		table.addCell(cell);
@@ -427,7 +427,7 @@ public class UserServiceImpl implements IUserService {
 
 		for (UserModel entity : entities) {
 			table.addCell(entity.fullName());
-			table.addCell(entity.getEmail1());
+			table.addCell(entity.getEmail());
 			table.addCell(entity.getEmail2());
 			table.addCell(String.valueOf(entity.getMobileNo1()));
 			table.addCell(entity.getMobileNo2() != null ? String.valueOf(entity.getMobileNo2()) : "");

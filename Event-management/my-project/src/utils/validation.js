@@ -1,14 +1,14 @@
 import * as yup from 'yup';
 
 export const loginSchema = yup.object().shape({
-  email1: yup.string().email('Invalid email').required('Email is required'),
+  email: yup.string().email('Invalid email').required('Email is required'),
   password: yup.string().required('Password is required'),
 });
 
 export const signupSchema = yup.object().shape({
   firstName: yup.string().required('First name required'),
   lastName: yup.string().required('Last name required'),
-  email1: yup.string().email('Invalid email').required('Email required'),
+  email: yup.string().email('Invalid email').required('Email required'),
   password: yup.string().min(8, 'Min 8 chars').required('Password required'),
   // Add more
 });

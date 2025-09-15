@@ -3,7 +3,7 @@ import { setToken } from '../utils/authUtils';
 import { toast } from 'react-toastify';
 
 export const authService = {
-  login: (email, password) => api.post('/auth/signin', { email1: email, password }),
+  login: (email, password) => api.post('/auth/signin', { email: email, password }),
   signup: (userData) => api.post('/auth/signup', userData),
   getProfile: (token) =>
     api.get('/auth/profile', {
@@ -21,7 +21,7 @@ export default authService;
 
 // ✅ Updated login function (Option 2)
 export const login = async (email, password) => {
-  const res = await api.post('/auth/signin', { email1: email, password });
+  const res = await api.post('/auth/signin', { email: email, password });
 
   // Set JWT in authUtils
   setToken(res.data.jwt);

@@ -89,9 +89,9 @@ const SignupForm = () => {
             </div>
             <TextField 
               label="Email" 
-              {...register('email1')} 
-              error={!!errors.email1} 
-              helperText={errors.email1?.message} 
+              {...register('email')}
+              error={!!errors.email}
+              helperText={errors.email?.message}
               fullWidth 
               className="pl-10"
               InputProps={{

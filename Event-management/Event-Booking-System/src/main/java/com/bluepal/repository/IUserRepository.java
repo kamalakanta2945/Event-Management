@@ -19,12 +19,12 @@ public interface IUserRepository extends MongoRepository<UserModel, String> {
 		       "{ 'firstName': { $regex: ?0, $options: 'i' } }, " +
 		       "{ 'middleName': { $regex: ?0, $options: 'i' } }, " +
 		       "{ 'lastName': { $regex: ?0, $options: 'i' } }, " +
-		       "{ 'email1': { $regex: ?0, $options: 'i' } }, " +
+		       "{ 'email': { $regex: ?0, $options: 'i' } }, " +
 		       "{ 'role': { $regex: ?0, $options: 'i' } } " +
 		       "] }")
 		Page<UserModel> findBySearchQuery(String query, Pageable pageable);
 
-	UserModel findByEmail1(String email1);
+	UserModel findByEmail(String email);
 
 	Optional<UserModel> findById(String userId);
 	
