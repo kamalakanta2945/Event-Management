@@ -8,24 +8,26 @@ import { signupSchema } from '../../utils/validation';
 import { VscPerson, VscMail, VscLock } from 'react-icons/vsc';
 
 const SignupForm = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm({ 
-    resolver: yupResolver(signupSchema) 
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(signupSchema)
   });
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
     try {
       await signup(data);
+      toast.success('Signup successful! Please log in.');
       navigate('/login');
     } catch (err) {
-      // Handled in service
+      toast.error(err.message || 'An unexpected error occurred.');
+      console.error('Signup failed:', err);
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-50 to-indigo-100 p-4">
-      <Paper 
-        elevation={12} 
+      <Paper
+        elevation={12}
         className="w-full max-w-md bg-white bg-opacity-90 backdrop-blur-lg rounded-2xl p-8 transform transition-all duration-300 hover:scale-[1.01]"
       >
         <div className="text-center mb-8">

@@ -1,7 +1,7 @@
 // src/components/admin/EventList.js
 import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import Loader from '../common/Loader';
@@ -12,6 +12,12 @@ import * as XLSX from 'xlsx';
 const EventList = () => {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredEvents = events.filter(event =>
+    event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    event.venue.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -64,8 +70,17 @@ const EventList = () => {
 
   return (
     <div style={{ height: 500, width: '100%' }}>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          label="Search Events"
+          variant="outlined"
+          fullWidth
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </Box>
       <DataGrid
-        rows={events}
+        rows={filteredEvents}
         columns={columns}
         getRowId={(row) => row.id} // ensures unique row ID
         autoHeight
@@ -73,8 +88,8 @@ const EventList = () => {
         rowsPerPageOptions={[5, 10, 20]}
       />
       <div className="mt-4 flex gap-3">
-        <Button variant="contained" onClick={() => exportEventsToExcel(events)}>Export Excel</Button>
-        <Button variant="outlined" onClick={() => exportEventsToPdf(events)}>Export PDF</Button>
+        <Button variant="contained" onClick={() => exportEventsToExcel(filteredEvents)}>Export Excel</Button>
+        <Button variant="outlined" onClick={() => exportEventsToPdf(filteredEvents)}>Export PDF</Button>
       </div>
     </div>
   );

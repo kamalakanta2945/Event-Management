@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Button, TextField, Link as MuiLink, Typography, Box, Paper } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { login } from '../../services/authService';
 import { loginSchema } from '../../utils/validation';
 import { VscMail, VscLock } from 'react-icons/vsc';
@@ -15,8 +16,11 @@ const LoginForm = () => {
   const onSubmit = async (data) => {
     try {
       await login(data.email, data.password);
+      toast.success('Login successful!');
       navigate('/dashboard');
-    } catch (err)      // Handled in service
+    } catch (err) {
+      toast.error(err.message || 'An unexpected error occurred.');
+      console.error('Login failed:', err);
     }
   };
 

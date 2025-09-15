@@ -1,7 +1,7 @@
 // src/components/user/BookingsList.js
 import { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { Button } from '@mui/material';
+import { Button, TextField, Box } from '@mui/material';
 import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import * as XLSX from 'xlsx';
@@ -11,6 +11,12 @@ import { getBookingsByUser, getAllBookings } from '../../services/bookingService
 const BookingsList = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredBookings = bookings.filter(booking =>
+    (booking.id && booking.id.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (booking.eventId && booking.eventId.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
 
   // Get current logged-in user from localStorage
   const user = JSON.parse(localStorage.getItem('user'));
@@ -74,16 +80,25 @@ const BookingsList = () => {
 
   return (
     <div style={{ height: 500, width: '100%' }}>
+      <Box sx={{ mb: 2 }}>
+        <TextField
+          label="Search Bookings"
+          variant="outlined"
+          fullWidth
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </Box>
       <DataGrid
-        rows={bookings}
+        rows={filteredBookings}
         columns={columns}
         pageSize={10}
         rowsPerPageOptions={[10, 20, 50]}
         autoHeight
       />
       <div className="mt-4 flex gap-3">
-        <Button variant="contained" onClick={() => exportBookingsToExcel(bookings)}>Export Excel</Button>
-        <Button variant="outlined" onClick={() => exportBookingsToPdf(bookings)}>Export PDF</Button>
+        <Button variant="contained" onClick={() => exportBookingsToExcel(filteredBookings)}>Export Excel</Button>
+        <Button variant="outlined" onClick={() => exportBookingsToPdf(filteredBookings)}>Export PDF</Button>
       </div>
     </div>
   );
